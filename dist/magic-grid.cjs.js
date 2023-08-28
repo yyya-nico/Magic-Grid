@@ -77,10 +77,8 @@ var MagicGrid = function MagicGrid (config) {
 
   if (config.container instanceof HTMLElement) {
     this.container = config.container;
-    this.containerClass = config.container.className;
   }
   else {
-    this.containerClass = config.container;
     this.container = document.querySelector(config.container);
   }
 
@@ -128,7 +126,7 @@ MagicGrid.prototype.initStyles = function initStyles () {
  * @private
  */
 MagicGrid.prototype.items = function items () {
-  return this.container.children;
+  return this.container.children.filter(function (item) { return getComputedStyle(item).display !== 'none'; });
 };
 
 /**
@@ -250,8 +248,6 @@ MagicGrid.prototype.getReady = function getReady () {
     var this$1 = this;
 
   var interval = setInterval(function () {
-    this$1.container = document.querySelector(this$1.containerClass);
-
     if (this$1.ready()) {
       clearInterval(interval);
 
