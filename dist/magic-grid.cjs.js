@@ -126,7 +126,7 @@ MagicGrid.prototype.initStyles = function initStyles () {
  * @private
  */
 MagicGrid.prototype.items = function items () {
-  return [].concat( this.container.children ).filter(function (item) { return getComputedStyle(item).display !== 'none'; });
+  return Array.from(this.container.children).filter(function (item) { return getComputedStyle(item).display !== 'none'; });
 };
 
 /**
