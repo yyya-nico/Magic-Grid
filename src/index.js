@@ -73,7 +73,7 @@ class MagicGrid {
    * @private
    */
   items () {
-    return this.container.children;
+    return this.container.children.filter(item => getComputedStyle(item).display !== 'none');
   }
 
   /**
