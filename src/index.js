@@ -24,10 +24,8 @@ class MagicGrid {
 
     if (config.container instanceof HTMLElement) {
       this.container = config.container;
-      this.containerClass = config.container.className;
     }
     else {
-      this.containerClass = config.container;
       this.container = document.querySelector(config.container);
     }
 
@@ -193,8 +191,6 @@ class MagicGrid {
    */
   getReady () {
     let interval = setInterval(() => {
-      this.container = document.querySelector(this.containerClass);
-
       if (this.ready()) {
         clearInterval(interval);
 
