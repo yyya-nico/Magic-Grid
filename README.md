@@ -1,4 +1,4 @@
-Don't rely on class when passing HTMLElement & don't compute elements with non display
+Don't rely on class when passing HTMLElement & don't compute elements with non display<br>
 HTMLElementを渡したときclassに頼らない & non displayの要素を計算しない
 
 ---
