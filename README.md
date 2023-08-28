@@ -1,5 +1,6 @@
 Don't rely on class when passing HTMLElement & don't compute elements with non display
 HTMLElementを渡したときclassに頼らない & non displayの要素を計算しない
+
 ---
 
 [![MIT License](https://img.shields.io/npm/l/magic-grid.svg?style=for-the-badge)](https://www.npmjs.com/package/magic-grid)
