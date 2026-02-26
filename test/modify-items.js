@@ -1,9 +1,4 @@
-/**
- * @author emmanuelolaojo
- * @since 2022-01-10
- */
-
-function addItems(numItems=10) {
+function addItems(numItems= 10) {
   const container = document.querySelector(".container");
   const items = container.children;
   const lastItem = items[items.length - 1];
@@ -21,8 +16,7 @@ function addItems(numItems=10) {
   magicGrid.positionItems();
 }
 
-
-function removeItems(numItems=10) {
+function removeItems(numItems = 10) {
   const container = document.querySelector(".container");
   const items = container.children;
   const lastIndex = items.length - 1;
@@ -33,6 +27,6 @@ function removeItems(numItems=10) {
   for (let i = lastIndex; i > stopIndex; i--){
     items[i].remove();
   }
-
   magicGrid.positionItems();
 }
+

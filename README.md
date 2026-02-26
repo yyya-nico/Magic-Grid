@@ -7,8 +7,6 @@ HTMLElementを渡したときclassに頼らない & non displayの要素を計�
 [![Downloads](https://img.shields.io/npm/dt/magic-grid.svg?style=for-the-badge)](https://www.npmjs.com/package/magic-grid)
 <!--[![Version](https://img.shields.io/npm/v/magic-grid.svg?style=for-the-badge)](https://www.npmjs.com/package/magic-grid)-->
 
-<a href="https://www.buymeacoffee.com/e.oj" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" height="40px"></a>
-
 # Magic Grid [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Magic%20Grid%20-%20A%20simple,%20lightweight%20Javascript%20library%20for%20dynamic%20grid%20layouts.&url=https://github.com/e-oj/Magic-Grid&hashtags=MagicGrid,GridLayout,JS)
 
 ## A simple, lightweight Javascript library for dynamic grid layouts.
@@ -19,7 +17,7 @@ Creating a dynamic grid layout has never been easier. With Magic Grid, all you h
 
 #### [Sample Usage](https://github.com/e-oj/Magic-Grid/blob/master/test/grid.html)
 
-<img src="https://drive.google.com/u/1/uc?id=1UaszcWA83aaLl0ZPAUtZW4K-qfuyJz7Z&export=download" alt="demo" width="850"></img>
+<img src="https://drive.google.com/u/1/uc?id=1UaszcWA83aaLl0ZPAUtZW4K-qfuyJz7Z" alt="demo" width="850"></img>
 
 ### Why not CSS Grid?
 
@@ -31,12 +29,13 @@ Check out <b>[CSS Grid AMA's issue #19](https://github.com/rachelandrew/cssgrid-
 
 > That's not something grid is designed for. Grid is two dimensional so you are always working in both rows and columns at the same time. You can't use grid to do a "masonry" style layout like that. You could place items in that way if you had a lot of rows and managed how many each spanned, but you can't use auto-placement to get that kind of layout.
 
+
 ### Ports
 
-| Repo | Author |
-|:--------|:-------|
-| [Vue-Magic-Grid](https://github.com/imlinus/Vue-Magic-Grid) | [@imlinus](https://github.com/imlinus) |
-| [Magic-Grid-React](https://github.com/IniZio/Magic-Grid-React) | [@IniZio](https://github.com/IniZio) |
+| Repo                                                        | Framework | Authors                                                                                                                                                          |
+|:------------------------------------------------------------|:----------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [use-magic-grid](https://github.com/e-oj/use-magic-grid)    | React     | [@e-oj](https://github.com/IniZio) [@Esstar612](https://github.com/Esstar612) [@SujiChen](https://github.com/SujiChen) [@yuguangl](https://github.com/yuguangl)  |
+| [Vue-Magic-Grid](https://github.com/imlinus/Vue-Magic-Grid) | Vue       | [@imlinus](https://github.com/imlinus)                                                                                                                           |
 
 ### Getting Started
 #### Step 1
@@ -70,9 +69,6 @@ let MagicGrid = require("magic-grid");
 You can also pull Magic Grid directly into your html
 
 ```html
-<script src="node_modules/magic-grid/dist/magic-grid.cjs.js"></script>
-
-<!-- or (minified) -->
 <script src="node_modules/magic-grid/dist/magic-grid.min.js"></script>
 ```
 
@@ -145,6 +141,11 @@ let magicGrid = new MagicGrid({
 magicGrid.listen();
 ```
 
+#### Magic grid will also listen for changes in container size
+<a href="https://drive.google.com/file/d/1iKCvlUIkxpXJFmNpV0FiEW5YECrIw14K/view">
+    <img src="https://drive.google.com/uc?id=1iKCvlUIkxpXJFmNpV0FiEW5YECrIw14K" alt="video thumbnail" width="850">
+</a>
+
 ---
 
 #### .positionItems()
@@ -164,6 +165,65 @@ magicGrid.listen();
 
 // reposition items
 magicGrid.positionItems();
+```
+
+---
+
+#### .onReady(callback)
+Adds a listener that executes a function once the grid is ready.
+
+```javascript
+const magicGrid = new MagicGrid({
+  container: '.container', // Required. Can be a class, id, or an HTMLElement
+  animate: true, // Optional
+  static: true, // Required for static content.
+});
+
+const id = magicGrid.onReady(() => {
+  console.log("Grid is ready");
+});
+
+magicGrid.listen();
+```
+
+---
+
+#### .onPositionComplete(callback)
+Adds a listener that executes a function whenever `positionItems` is called. 
+**Note: `positionItems` is called during initial setup and whenever the container or window is resized**
+
+```javascript
+const magicGrid = new MagicGrid({
+  container: '.container', // Required. Can be a class, id, or an HTMLElement
+  animate: true, // Optional
+  static: true, // Required for static content.
+});
+
+const id = magicGrid.onPositionComplete(() => {
+  console.log("Grid Has Been Resized"); // Example function
+});
+
+magicGrid.listen();
+```
+
+---
+
+#### .removeListener(id)
+Allows the removal of any listener by its unique ID.
+
+```javascript
+const magicGrid = new MagicGrid({
+  container: '.container', // Required. Can be a class, id, or an HTMLElement
+  animate: true, // Optional
+  static: true, // Required for static content.
+});
+
+const id = magicGrid.onPositionComplete(() => {
+  console.log("Grid Has Been Resized"); 
+  magicGrid.removeListener(id); // remove callback listener
+});
+
+magicGrid.listen();
 ```
 
 ---
