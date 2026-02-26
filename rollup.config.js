@@ -1,35 +1,22 @@
-import resolve from "rollup-plugin-node-resolve";
-import commonjs from "rollup-plugin-commonjs";
-import buble from "rollup-plugin-buble";
-import uglify from "rollup-plugin-uglify-es";
-import pkg from "./package.json";
+const resolve = require("@rollup/plugin-node-resolve");
+const commonjs = require("@rollup/plugin-commonjs");
+const babel = require("@rollup/plugin-babel");
+const terser = require("@rollup/plugin-terser");
 
-export default [{
+module.exports = [{
   input: "src/index.js",
   output: {
-    file: pkg.browser,
+    file: "dist/magic-grid.min.js",
     format: "umd",
     name: "MagicGrid"
   },
   plugins: [
     resolve(),
     commonjs(),
-    buble({ // transpile ES2015+ to ES5
-      exclude: ["node_modules/**"],
-      transforms: { forOf: false }
+    babel({
+      exclude: "node_modules/**",
+      babelHelpers: "bundled"
     }),
-    uglify()
-  ]
-}, {
-  input: "src/index.js",
-  output: [
-    { file: pkg.main, format: "cjs" },
-    { file: pkg.module, format: "es" }
-  ],
-  plugins: [
-    buble({
-      exclude: ["node_modules/**"],
-      transforms: { forOf: false }
-    })
+    terser()
   ]
 }];

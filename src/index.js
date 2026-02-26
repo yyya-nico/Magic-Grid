@@ -7,12 +7,11 @@
  * grid layout.
  */
 
-import {
-  checkParams,
-  getMin
-} from "./utils";
+const EventEmitter = require("./event-emitter.js");
+const {checkParams, getMin} = require("./utils.js");
+const {READY_EVENT, POSITIONING_COMPLETE_EVENT, REPOSITIONING_DELAY} = require("./constant.js");
 
-class MagicGrid {
+class MagicGrid extends EventEmitter{
   /**
    * Initializes the necessary variables
    * for a magic grid.
@@ -20,6 +19,7 @@ class MagicGrid {
    * @param config - configuration object
    */
   constructor (config) {
+    super();
     checkParams(config);
 
     if (config.container instanceof HTMLElement) {
@@ -38,6 +38,22 @@ class MagicGrid {
     this.animate = config.animate || false;
     this.center = config.center;
     this.styledItems = new Set();
+    this.resizeObserver = null;
+    this.isPositioning = false;
+  }
+
+  /**
+   * Set a new container. Useful in cases where
+   * the container reference changes for any reason.
+   *
+   * @param container {HTMLElement}
+   */
+  setContainer(container){
+      const previousContainer =  this.container;
+      this.container = container;
+
+      this.resizeObserver.unobserve(previousContainer);
+      this.resizeObserver.observe(container);
   }
 
   /**
@@ -57,7 +73,7 @@ class MagicGrid {
       let style = items[i].style;
 
       style.position = "absolute";
-  
+
       if (this.animate) {
         style.transition = `${this.useTransform ? "transform" : "top, left"} 0.2s ease`;
       }
@@ -136,6 +152,13 @@ class MagicGrid {
    * the height of the grid.
    */
   positionItems () {
+
+    if(this.isPositioning){
+      return;
+    }
+
+    this.isPositioning = true;
+
     let { cols, wSpace } = this.setup();
     let maxHeight = 0;
     let colWidth = this.colWidth();
@@ -168,6 +191,8 @@ class MagicGrid {
     }
 
     this.container.style.height = maxHeight + this.gutter + "px";
+    this.isPositioning = false;
+    this.emit(POSITIONING_COMPLETE_EVENT);
   }
 
   /**
@@ -199,6 +224,19 @@ class MagicGrid {
     }, 100);
   }
 
+  observeContainerResize() {
+    if (this.resizeObserver) return;
+
+    this.resizeObserver = new ResizeObserver(() => {
+      setTimeout(() => {
+        this.positionItems();
+      }, REPOSITIONING_DELAY);
+
+    });
+
+    this.resizeObserver.observe(this.container);
+  }
+
   /**
    * Positions all the items and
    * repositions them whenever the
@@ -206,21 +244,29 @@ class MagicGrid {
    */
   listen () {
     if (this.ready()) {
-      let timeout;
 
       window.addEventListener("resize", () => {
-        if (!timeout){
-          timeout = setTimeout(() => {
-            this.positionItems();
-            timeout = null;
-          }, 200);
-        }
+
+        setTimeout(() => {
+          this.positionItems();
+        }, REPOSITIONING_DELAY);
+
       });
 
+      this.observeContainerResize();
       this.positionItems();
+      this.emit(READY_EVENT);
     }
     else this.getReady();
   }
+
+  onReady(callback) {
+    return this.addListener(READY_EVENT, callback);
+  }
+
+  onPositionComplete(callback) {
+    return this.addListener(POSITIONING_COMPLETE_EVENT, callback);
+  }
 }
 
-export default MagicGrid;
+module.exports = MagicGrid;
