@@ -1,5 +1,8 @@
-Don't rely on class when passing HTMLElement & don't compute elements with non display<br>
+Don't rely on class when passing HTMLElement & don't compute elements with non display  
 HTMLElementを渡したときclassに頼らない & non displayの要素を計算しない
+
+Do not generate an error even if the container is empty.  
+コンテナ内が空でもエラーにしない
 
 ---
 

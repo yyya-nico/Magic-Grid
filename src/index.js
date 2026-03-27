@@ -49,11 +49,11 @@ class MagicGrid extends EventEmitter{
    * @param container {HTMLElement}
    */
   setContainer(container){
-      const previousContainer =  this.container;
-      this.container = container;
+    const previousContainer =  this.container;
+    this.container = container;
 
-      this.resizeObserver.unobserve(previousContainer);
-      this.resizeObserver.observe(container);
+    this.resizeObserver.unobserve(previousContainer);
+    this.resizeObserver.observe(container);
   }
 
   /**
@@ -89,7 +89,7 @@ class MagicGrid extends EventEmitter{
    * @private
    */
   items () {
-    return Array.from(this.container.children).filter(item => getComputedStyle(item).display !== 'none');
+    return Array.from(this.container.children).filter(item => getComputedStyle(item).display !== "none");
   }
 
   /**
@@ -99,7 +99,7 @@ class MagicGrid extends EventEmitter{
    * @private
    */
   colWidth () {
-    return this.items()[0].getBoundingClientRect().width + this.gutter;
+    return this.items()[0] ? this.items()[0].getBoundingClientRect().width + this.gutter : 0;
   }
 
   /**
@@ -111,7 +111,7 @@ class MagicGrid extends EventEmitter{
    */
   setup () {
     let width = this.container.getBoundingClientRect().width;
-    let colWidth = this.colWidth();
+    let colWidth = this.colWidth() || width;
     let numCols = Math.floor(width/colWidth) || 1;
     let cols = [];
 
